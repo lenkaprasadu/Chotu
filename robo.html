@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Prasad Chatbot</title>
+  <style>
+    body {
+      background: #121212;
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px;
+    }
+
+    h1 {
+      color: #00ffff;
+    }
+
+    #chatbox {
+      width: 90%;
+      max-width: 500px;
+      height: 400px;
+      background: #1e1e1e;
+      border: 1px solid #00ffff;
+      border-radius: 10px;
+      padding: 10px;
+      overflow-y: auto;
+    }
+
+    .user { color: #00ff7f; }
+    .Chotu { color: #00ffff; }
+
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background-color: #00ffff;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #00cccc;
+    }
+
+    /* FAQ section styles */
+        .faq {
+            background: rgb(5, 165, 82);
+            padding: 50px 20px;
+            text-align: center;
+        }
+
+        .faq h2 {
+            margin-bottom: 30px;
+            font-size: 36px;
+        }
+
+        .faq-item {
+            margin-bottom: 20px;
+            cursor: pointer;
+            text-align: left;
+            max-width: 800px;
+            margin: 20px auto;
+        }
+
+        .faq-item h4 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .faq-item p {
+            display: none;
+            color: #666;
+        }
+
+  </style>
+</head>
+<body>
+  <h1>Chotu</h1>
+  <div id="chatbox"></div>
+  <button onclick="startListening()">🎙️ Speak to Chotu</button><p></p>
+  <section id="faq" class="faq">
+        <h2>Asked Questions</h2>
+        <div class="faq-item">
+            <h3><font color="blue">Click me  ^</font></h3>
+            <p><font color="broun">1. Good morning<br>
+              2. good afternoon<br>
+              3. how many month's in year <br>
+              4. what is your name<br>
+              5. i love you<br>
+              6. how are you
+            </font></p>
+        </div>
+    </section>
+
+  <script>
+    document.querySelectorAll('.faq-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const p = item.querySelector('p');
+                p.style.display = p.style.display === 'block' ? 'none' : 'block';
+            });
+        });
+    const chatbox = document.getElementById("chatbox");
+
+    function addMessage(sender, text) {
+      const msg = document.createElement("div");
+      msg.className = sender;
+      msg.textContent = (sender === "user" ? "You: " : "Chotu: ") + text;
+      chatbox.appendChild(msg);
+      chatbox.scrollTop = chatbox.scrollHeight;
+    }
+
+    function speak(text) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.voice = speechSynthesis.getVoices().find(v => v.name.includes("Google") || v.default);
+      speechSynthesis.speak(utterance);
+    }
+
+    function respond(input) {
+      let response = "I'm sorry sir, I didn't understand that.";
+      if (input.includes("good afternoon")){
+        response="good afternoon sir"
+      }
+      if (input.include("how many month's in year")){
+        response="Twelve months"
+      }
+      if (input.includes("what is your name")) {
+        response = "I'm chotu, your smart assistant.";
+      }
+      if (input.includes("how many lovers")) {
+        response ="i am single"
+      }
+      if (input.includes("good morning")){
+        response="very good morning prasad";
+      }
+      if (input.includes("i love you")){
+        response="i love you too.";
+      }
+
+      if (input.includes("hello") || input.includes("hi")) {
+        response = "Hello! sir. How can I assist you today?";
+      } else if (input.includes("what is your name")) {
+        response = "I'm chotu, your smart assistant.";
+      } else if (input.includes("time")) {
+        response = "The time is " + new Date().toLocaleTimeString();
+      } else if (input.includes("date")) {
+        response = "Today's date is " + new Date().toLocaleDateString();
+      } else if (input.includes("how are you")) {
+        response = "I'm doing great! Ready to assist you.";
+      } else if (input.includes("bye")) {
+        response = "Goodbye! Have a wonderful day.";
+      }
+
+      addMessage("Chotu", response);
+      speak(response);
+    }
+
+    function startListening() {
+      const recognition = new webkitSpeechRecognition() || new SpeechRecognition();
+      recognition.lang = "en-US";
+      recognition.start();
+
+      recognition.onstart = () => {
+        speak("Listening...");
+      };
+
+      recognition.onresult = function(event) {
+        const transcript = event.results[0][0].transcript.toLowerCase();
+        addMessage("user", transcript);
+        respond(transcript);
+      };
+
+      recognition.onerror = function(event) {
+        speak("Sorry, prasad sir, I didn't catch that.");
+      };
+    }
+  </script>
+</body>
+</html>
