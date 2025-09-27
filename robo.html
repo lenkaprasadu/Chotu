@@ -102,15 +102,15 @@
                 const p = item.querySelector('p');
                 p.style.display = p.style.display === 'block' ? 'none' : 'block';
             });
-        });
-    const chatbox = document.getElementById("chatbox");
+    });
+    const chatbox1 = document.getElementById("chatbox");
 
     function addMessage(sender, text) {
       const msg = document.createElement("div");
       msg.className = sender;
       msg.textContent = (sender === "user" ? "You: " : "Chotu: ") + text;
-      chatbox.appendChild(msg);
-      chatbox.scrollTop = chatbox.scrollHeight;
+      chatbox1.appendChild(msg);
+      chatbox1.scrollTop = chatbox1.scrollHeight;
     }
 
     function speak(text) {
@@ -177,6 +177,12 @@
         speak("Sorry, prasad sir, I didn't catch that.");
       };
     }
+
+
+
+
+
+  
   </script>
 </body>
 </html>
